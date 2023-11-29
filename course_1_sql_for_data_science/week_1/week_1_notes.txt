@@ -1,0 +1,31 @@
+SQL = Structured Query Language
+CRUD = Create Read Update Delete
+
+SQL is not a procedural language.  You can't write a complete application with it.
+
+ER Diagrams / ER Model : Is composed of entity types and specifies relationships that can exist between instances of those entity types.  Entity Relationship 
+
+What is the problem that you're trying to solve?  Think before you code.  You'll get more accurate results, speed up your work, and have less rework.
+
+A database is a container (not a docker container, usually a set of files or a file) to store organized data; a set of related information.
+
+Tables:  A structured list of data or a specific type.
+
+Column: A single field in a table - all tables are made up of one or more columns.  Row: A record in a table.
+
+Data modeling is the organization and structure of information into multiple related tables.  This can represent a business process or show relationships between business processes.  This Should closely represent the real world.
+
+NoSQL is not only Not Structured, it has also come to mean Not Only SQL.
+
+A relational Model allows for easy querying and data manipulation in an easy, logical, and intuitive way.
+
+A transactional Model is an operational database - think of an insurance company storing ALL claims in a database.
+
+A Primary Key in a table is a column (or set of columns) whose values uniquely identify every row in a table.
+A Foreign Key is one or more columns that can be used together to identify a single row in another table.
+
+
+
+
+
+
