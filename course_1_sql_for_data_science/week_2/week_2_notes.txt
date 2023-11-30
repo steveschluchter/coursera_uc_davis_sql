@@ -1,0 +1,37 @@
+New clauses and operators
+IN BETWEEN LIKE ORDER BY NOT 
+OR GROUP BY
+
+Aggregate functions
+AVERAGE
+MIN
+MAX
+COUNT
+
+
+Wildcards for text matching, too.
+
+IN Vs. OR: In has: a long list of options, IN executes faster than OR, you don't have to think about the order with IN, and the IN clause can contain another SELECT statement.
+
+In SQL, AND is processed before OR, and NOT is processed before AND.
+
+Wildcards: LIKE, %, _.
+
+LIKE is technically a predicate, but we sometimes call it an operator anyway.
+
+% will not match NULL values.
+
+_ is a wildcard for a single character.  It's not supported by DB2.
+
+
+Brackets will specify a set of characters in a specific location.  This does NOT work with SQLite.
+
+Wildcards take longer to run.  Use some other comparator if possible.
+
+ORDER BY 2, 3 -- orders by the second and third column of a query.
+
+A HAVING clause counts groups accounted for in GROUP BY clauses.
+
+A GROUP BY does not order the data on its own.  You should still use the ORDER BY clause.
+
+

@@ -24,8 +24,17 @@ A transactional Model is an operational database - think of an insurance company
 A Primary Key in a table is a column (or set of columns) whose values uniquely identify every row in a table.
 A Foreign Key is one or more columns that can be used together to identify a single row in another table.
 
+When defining a table.
+Every column can accept NULL or NOT NULL values.  A PRIMARY KEY cannot have NULL values.
 
+Temporary tables are deleted when the current session is terminated.  They're faster than creating a real table.  They allow you to simplify complex queries.
 
+You can UPDATE or DELETE a table.  Think add/delete columns, etc.
 
+Normalization is the process to eliminate data redundancy and enhance data integrity in the table. Normalization also helps to organize the data in the database. It is a multi-step process that sets the data into tabular form and removes the duplicated data from the relational tables.
 
+Normalization organizes the columns and tables of a database to ensure that database integrity constraints properly execute their dependencies. It is a systematic technique of decomposing tables to eliminate data redundancy (repetition) and undesirable characteristics like Insertion, Update, and Deletion anomalies.
+
+Star Architecture
+Snowflake Architecture
 
