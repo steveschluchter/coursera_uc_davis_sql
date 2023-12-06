@@ -1,0 +1,34 @@
+Concatenation in SQL is done by using the || operator.
+
+SELECT TRIM( ) -- the parameter removes whitespaces from the right and from the left.
+
+SELECT SUBSTR(string, begin, next n characters)
+
+UPPER(x)
+LOWER(x)
+UCASE(x).
+
+STRFTIME( x,y,z) is used to extract specific features of a datetime string.
+SELECT DATE('now')
+
+A VIEW is a stored query.
+
+A view is like a table, but it's not a table in that you don't have to run any ETL.  You can use them in any DB except to store a procedure.  VIEWS are useful for complex JOINS where you're isolating specific operations.  A VIEW creats a table like structure without the ability to write data to that table.  A VIEW is a great tool to isolate parts of a query.
+
+Things you can do while getting to know your data: number of rows, table size, when the table was last updated.
+
+You can also get to know (profile) the columns of your table: get the column data types, get the number of distinct vaues and the distinct values themselves, get the number of rows with NULL values, and descriptive statistics (maximum/minimum, average (weighted), and standard deviation of column values.
+
+Governance best practices: understand your read and write capabilities, clean up your environments, understand your promotion process (how data moves in your data layer(s).
+
+Remember that there is a difference between data understanding and business understanding.  You have to know the data problem and know the business problems, and know how to formualte your queries to go between the two environments.
+
+Profiling Data: get the details of your data; create a data model and map the fields and tables you need, consider joins and calculations, understand any data or quality issues.
+
+Start with SELECT: start simple; any query begins with SELECT statement; add in special formatting; if using subqueries, start with the innermost query and work outward.
+
+Test and troubleshoot: do not wait until after the end to test queries; test after each join or filter; are you getting the results you expect?; start small and go step by step when troubleshooting a query.
+
+Format and comment: use correct formatting and indentation; comment strategically; clean code and comments help when revisiting or handing off code.
+
+

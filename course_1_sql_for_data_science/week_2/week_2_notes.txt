@@ -34,4 +34,35 @@ A HAVING clause counts groups accounted for in GROUP BY clauses.
 
 A GROUP BY does not order the data on its own.  You should still use the ORDER BY clause.
 
+Subqueries are queries embedded in other queries.
+
+Subquery best practices: subquery selects can only recieve a single column; performance slows with each nested subquery.
+
+poorsql.com is a sql formatting website that indents SQL properly for you for the sake of readability.
+
+A Cartesian Join is sometimes called a cross join:X x Y = { (x,y): x in X and y in Y }.
+
+Joins are taxing on DB servers and on other CPUs.  If you don't need a join, don't do a join.
+
+An example of a self join:
+SELECT
+    A.CustomerName AS CustomerName1
+    B.CustomerName AS CustomerName2
+FROM Customers A , Customers B
+WHERE A.CustomerID = B.CustomerID
+AND A.city = B.city
+ORDER BY A.city;
+
+SQLITE does not support the FULL OUTER JOIN and the RIGHT OUTER JOIN.
+
+A SQL UNION is used to combine the results of two or more SELECT statements.
+
+To do a union, the data types must match and the columns from the select statements must by in the same order - the data types must match and their corresponding columns must match, too.
+
+UNION returns selected columns, and you have to specify them.  UNION ALL returns all columns, and you don't have to specify them.
+
+UNION ALL does not eliminate duplicate rows whereas UNION is filtered for duplidate rows: a UNION effective does a SELECT DISTINCT on the returned set.
+
+In general, JOINS are faster than subqueries.
+
 
