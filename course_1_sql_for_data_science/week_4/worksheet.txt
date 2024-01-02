@@ -38,11 +38,11 @@ iii. Category = 2643 (I counted the number of distinct categories; I used the 'c
 iv. Attribute = 1115 (I counted the number of distinct business ids; I used the 'business_id' column.)
 v. Review = 10000 (I counted the number of distinct reviews; I used the 'text' column.)
 vi. Checkin = 10000 (I counted the number of rows because I looked at a sample and saw that each one was unique.) 
-vii. Photo = 10000 (I counted the number of distinct ids; I used the 'id column.) 
-viii. Tip = 
-ix. User = 
-x. Friend = 
-xi. Elite_years =
+vii. Photo = 10000 (I counted the number of distinct ids; I used the 'id' column.). 
+viii. Tip = 9997 (I used all of the columns and grouped all of them: I started using GROUP BY clauses and looked at the line (Output limit exceeded, 25 of 9997 total rows shown).)
+ix. User = 10000 (I counted the number of distinct ids; I used the 'id' column.) 
+x. Friend = 10000 (I used a group by clause on both user_id and friend_id and considered the line (Output limit exceeded, 25 of 10000 total rows shown).)
+xi. Elite_years = 10000 (I used a group by clause on both user_id and year and considered the line (Output limit exceeded, 25 of 10000 total rows shown).)
 
 Note: Primary Keys are denoted in the ER-Diagram with a yellow key icon.	
 
@@ -50,11 +50,22 @@ Note: Primary Keys are denoted in the ER-Diagram with a yellow key icon.
 
 3. Are there any columns with null values in the Users table? Indicate "yes," or "no."
 
-	Answer:
+	Answer: 0 
 	
 	
 	SQL code used to arrive at answer:
-	
+
+        SELECT 
+            COUNT(*) 
+        FROM 
+            user
+        WHERE 
+            id IS NULL or name is NULL or review_count IS NULL or yelping_since IS NULL
+            OR useful IS NULL OR funny IS NULL OR cool IS NULL OR fans IS NULL
+            OR average_stars IS NULL OR compliment_hot is NULL OR compliment_profile is NULL
+            OR compliment_cute IS NULL OR compliment_list IS NULL OR compliment_note IS NULL
+            OR compliment_plain IS NULL OR compliment_cool IS NULL OR compliment_funny IS NULL
+            OR compliment_writer IS NULL OR compliment_photos IS NULL;	
 	
 
 	
@@ -62,38 +73,76 @@ Note: Primary Keys are denoted in the ER-Diagram with a yellow key icon.
 
 	i. Table: Review, Column: Stars
 	
-		min:		max:		avg:
+		min: 1		max: 3		avg: 3.7082
 		
 	
 	ii. Table: Business, Column: Stars
 	
-		min:		max:		avg:
+		min: 1 		max: 5		avg: 3.6549
 		
 	
 	iii. Table: Tip, Column: Likes
 	
-		min:		max:		avg:
-		
+		min: 0 		max: 2		avg: 0.0144		
 	
 	iv. Table: Checkin, Column: Count
 	
-		min:		max:		avg:
+		min: 1		max: 53		avg: 1.9414
 		
 	
 	v. Table: User, Column: Review_count
 	
-		min:		max:		avg:
+		min: 0 		max: 2000	avg: 24.2995
 		
 
 
 5. List the cities with the most reviews in descending order:
 
-	SQL code used to arrive at answer:
+	SQL code used to arrive at answer: 
+
+        SELECT 
+            b.city, count(r.id) AS cnt
+        FROM 
+            business b
+        INNER JOIN
+            review r on b.id = r.business_id
+        GROUP BY
+            b.city
+        ORDER BY cnt DESC;
 	
 	
 	Copy and Paste the Result Below:
 	
-
++-----------------+-----+
+| city            | cnt |
++-----------------+-----+
+| Las Vegas       | 193 |
+| Phoenix         |  65 |
+| Toronto         |  51 |
+| Scottsdale      |  37 |
+| Henderson       |  30 |
+| Tempe           |  28 |
+| Pittsburgh      |  23 |
+| Chandler        |  22 |
+| Charlotte       |  21 |
+| Montréal        |  18 |
+| Madison         |  16 |
+| Gilbert         |  13 |
+| Mesa            |  13 |
+| Cleveland       |  12 |
+| North Las Vegas |   6 |
+| Edinburgh       |   5 |
+| Glendale        |   5 |
+| Lakewood        |   5 |
+| Cave Creek      |   4 |
+| Champaign       |   4 |
+| Markham         |   4 |
+| North York      |   4 |
+| Mississauga     |   3 |
+| Surprise        |   3 |
+| Avondale        |   2 |
++-----------------+-----+
+(Output limit exceeded, 25 of 67 total rows shown)
 	
 6. Find the distribution of star ratings to the business in the following cities:
 
@@ -101,93 +150,710 @@ i. Avon
 
 SQL code used to arrive at answer:
 
+    SELECT 
+        stars, count(stars) cnt
+    FROM 
+            review 
+    WHERE 
+        business_id 
+    IN (
+        SELECT 
+           b.id
+        FROM
+           business b
+        WHERE b.city ='Avon')
+    --GROUP BY stars;
+
+When I uncomment the GROUP BY line this query returns no results at all since a GROUP BY can't group on something that doesn't exist.
 
 Copy and Paste the Resulting Table Below (2 columns â€“ star rating and count):
+
++-------+-----+
+| stars | cnt |
++-------+-----+
+|  None |   0 |
++-------+-----+
 
 
 ii. Beachwood
 
-SQL code used to arrive at answer:
 
+    SELECT 
+        stars, count(stars) cnt
+    FROM 
+        review 
+    WHERE 
+        business_id 
+    IN (
+        SELECT 
+            b.id
+        FROM
+            business b
+    WHERE 
+        b.city ='Beachwood')
+    GROUP BY 
+        stars;
 
 Copy and Paste the Resulting Table Below (2 columns â€“ star rating and count):
 		
++-------+-----+
+| stars | cnt |
++-------+-----+
+|     3 |   1 |
++-------+-----+
 
 
 7. Find the top 3 users based on their total number of reviews:
 		
 	SQL code used to arrive at answer:
-	
+
+        SELECT 
+            user_id, COUNT(DISTINCT(id)) cnt
+        FROM 
+            review
+        GROUP BY 
+            user_id
+        ORDER BY 
+            cnt DESC
+        LIMIT 3;
+        
 		
 	Copy and Paste the Result Below:
-		
+	
+        +------------------------+-----+
+        | user_id                | cnt |
+        +------------------------+-----+
+        | CxDOIDnH8gp9KXzpBHJYXw |   7 |
+        | U4INQZOPSUaj8hMjLlZ3KA |   7 |
+        | 8teQ4Zc9jpl_ffaPJUn6Ew |   5 |
+        +------------------------+-----+        
 
 
 8. Does posing more reviews correlate with more fans?
 
+        It appears that having reviews is necessary but not sufficient to have fans.
+        More generally, I don't see a strong correlation between the number of fans and the number of reviews posted.
+        I used two different queries to come to this conclusion.  The limitations of the web based interface made this a somewhat difficult task.
+
+
 	Please explain your findings and interpretation of the results:
-	
+
+            a.) For my first query.
+
+            Here is my SQL code:
+            
+
+            SELECT 
+                user.fans fans, review.user_id, count(distinct(review.id)) cnt 
+            FROM
+                user
+            INNER JOIN 
+                review
+            ON 
+                review.user_id = user.id
+            GROUP BY
+            user.fans, review.user_id
+            ORDER BY
+                fans DESC;
+
+          
+            Here is the output of the query
+
+            +------+------------------------+-----+
+            | fans | user_id                | cnt |
+            +------+------------------------+-----+
+            |   80 | -C-l8EHSLXtZZVfUAUhsPA |   1 |
+            |   49 | -fQPzH-e-ubDIiLQhybEjQ |   1 |
+            |   41 | --Qh8yKWAvIP4V4K8ZPfHA |   1 |
+            |   38 | -fUARDNuXAfrOn4WLSZLgA |   1 |
+            |   32 | -k5yFUChotBMGQgHdFZvLQ |   1 |
+            |   29 | -aq0KKWyMbhugu183UGj7Q |   1 |
+            |   27 | -Biq3Dt8YhkRJEO_ITrvww |   2 |
+            |   25 | -hxUwfo3cMnLTv-CAaP69A |   1 |
+            |   18 | -hzflbbqcKxDTLfDcjQEzA |   1 |
+            |   16 | -ARdx8hOcEWlMDjzwLYZ_g |   1 |
+            |   15 | -CxzWyvRj3b3tvFdelf38w |   1 |
+            |   14 | -CLMUyt1G88DHYytsuPebQ |   1 |
+            |   12 | -FFqZupwGHf-vrsUHMr_vw |   1 |
+            |   11 | -d4NT5rjIpZEz07f5rYtlg |   1 |
+            |   10 | -594af_E7Z9VVjQc9pJK3g |   1 |
+            |   10 | -K8IQoaXwzxBCGx1IU86aw |   1 |
+            |    6 | -7bM_DeL2Kj2CuYuVDsLNg |   1 |
+            |    6 | -fEe8XBeJ6pGLIeAyAWzfw |   1 |
+            |    6 | -jL7hLAAwOnCAWKQlL9Wew |   1 |
+            |    5 | -beWfoN6lbHXCOvWWfDClw |   1 |
+            |    5 | -iFWTEPA84DKWBhGww8EeQ |   1 |
+            |    4 | -BevLRnJhh9JeIT2g5I3mQ |   1 |
+            |    4 | -KpEgEen1tj-jdjIS7uVOw |   1 |
+            |    3 | -0udWcFQEt2M8kM3xcIofw |   2 |
+            |    3 | -4ARERfWgDsMfy1Pu7AbLA |   1 |
+            +------+------------------------+-----+
+            (Output limit exceeded, 25 of 69 total rows shown)
+     
+
+            b.) For my second query.
+           
+            Here is my sql query.
+
+            SELECT 
+                user.fans fans, review.user_id, count(distinct(review.id)) cnt 
+            FROM
+                user
+            INNER JOIN review
+                ON 
+                    review.user_id = user.id
+            GROUP BY
+                user.fans, review.user_id
+            ORDER BY
+                fans ASC;
+        
+            Here is the output of the query.
+
+            +------+------------------------+-----+
+            | fans | user_id                | cnt |
+            +------+------------------------+-----+
+            |    0 | --i0PK1aTXScdV2UkNDkSQ |   1 |
+            |    0 | -0DgO-WJ7yBjAihY_PoUpw |   1 |
+            |    0 | -0WUJsVpizkaAYQp05giUA |   1 |
+            |    0 | -27BmUSrHjQQqItaFFIwxA |   1 |
+            |    0 | -5Y3idbK2Yzuz9munIF3tg |   1 |
+            |    0 | -5psN9APmb8RcprBFA6lfw |   1 |
+            |    0 | -7ABF3eAKE98kiufwQ2dng |   1 |
+            |    0 | -8EE28ZzxVFxwjRqJuDumg |   1 |
+            |    0 | -9ly39RQ8CvqxPuNZrGEbA |   1 |
+            |    0 | -BJAX2vP87uzbAQkrkDPDA |   1 |
+            |    0 | -EJ5aLt72W5JYKjqn7fI1Q |   1 |
+            |    0 | -EdQTVyh9dgjp0N-gFWWDA |   1 |
+            |    0 | -HBGMPJKdq1Ov75uzO2t6Q |   1 |
+            |    0 | -Hpah8QHUeWjSWq1qSIozQ |   1 |
+            |    0 | -I667x7jrf9u5QiEb7iCqQ |   1 |
+            |    0 | -Lcp9BDlDDo7j3aIGJWjYg |   1 |
+            |    0 | -bhXzKth2lHYYUYvv_4aMw |   1 |
+            |    0 | -gi3QTLxpER5LqqPXYEsMw |   1 |
+            |    0 | -hThSpN6WNeAIGsUb3f-fw |   1 |
+            |    0 | -iokf7gI-XJAfZyUJKLbtQ |   1 |
+            |    0 | -j2WXPtYRO_LVRl_BPrgiA |   1 |
+            |    0 | -kaIBHIW0xZhLavT0_cVRQ |   1 |
+            |    0 | -lax4vB95WPfnLJcUrVd_w |   1 |
+            |    1 | -0oUqPRPpbi2MyiK39cCTg |   1 |
+            |    1 | -7Mo5iv_3t7u000eYaduGw |   1 |
+            +------+------------------------+-----+
+            (Output limit exceeded, 25 of 69 total rows shown)        
 
 	
 9. Are there more reviews with the word "love" or with the word "hate" in them?
 
 	Answer:
-
+           
+            There are far more reviews that have the word 'love' as a standalone word. 
+            I counted 1173 reviews that contain the word 'love' in them as a standalone word. 
+            I counted 85 reviews that contain the word 'hate' in them as a standalone word.
 	
-	SQL code used to arrive at answer:
+	SQL code used to arrive at answer.  I had a tough time with this one because I couldn't get regexes to work in the SQL lookup webapp.
 
-	
+        SELECT
+            COUNT(DISTINCT(text))
+        FROM 
+            review
+        WHERE
+            LOWER(text) LIKE '% love %' OR
+            LOWER(text) LIKE 'love %' OR
+            LOWER(text) LIKE '% love.%' OR
+            LOWER(text) LIKE '% love,%' OR
+            LOWER(text) LIKE '% love:%' OR
+            LOWER(text) LIKE '% love;%' OR
+            LOWER(text) LIKE 'love,%' OR
+            LOWER(text) LIKE 'love;%' OR
+            LOWER(text) LIKE 'love.%' OR
+            LOWER(text) LIKE '%-love-%';
+
+        SELECT
+            COUNT(DISTINCT(text))
+        FROM 
+            review
+        WHERE
+            LOWER(text) LIKE '% hate %' OR
+            LOWER(text) LIKE 'hate %' OR
+            LOWER(text) LIKE '% hate.%' OR
+            LOWER(text) LIKE '% hate,%' OR
+            LOWER(text) LIKE '% hate:%' OR
+            LOWER(text) LIKE '% hate;%' OR
+            LOWER(text) LIKE 'hate,%' OR
+            LOWER(text) LIKE 'hate;%' OR
+            LOWER(text) LIKE 'hate.%' OR
+            LOWER(text) LIKE '%-hate-%';       	
 	
 10. Find the top 10 users with the most fans:
 
 	SQL code used to arrive at answer:
 	
+        SELECT
+            name, fans
+        FROM 
+            user
+        ORDER BY
+            fans 
+        DESC
+        LIMIT 10;        
 	
 	Copy and Paste the Result Below:
 
-	
-		
+	+-----------+------+
+        | name      | fans |
+        +-----------+------+
+        | Amy       |  503 |
+        | Mimi      |  497 |
+        | Harald    |  311 |
+        | Gerald    |  253 |
+        | Christine |  173 |
+        | Lisa      |  159 |
+        | Cat       |  133 |
+        | William   |  126 |
+        | Fran      |  124 |
+        | Lissa     |  120 |
+        +-----------+------+		
 
 Part 2: Inferences and Analysis
 
 1. Pick one city and category of your choice and group the businesses in that city or category by their overall star rating. Compare the businesses with 2-3 stars to the businesses with 4-5 stars and answer the following questions. Include your code.
+
+I chose the city of Las Vegas.
+
 	
 i. Do the two groups you chose to analyze have a different distribution of hours?
 
+    
+    There is some divergence between the two sets of hours.
+    There were only 14 rows in the query for businesses with 2-3 stars, and they were for two distinct businesses (Walgreens and Wingstop) that were open almost all day and late into the evening most days of the week.
+    These are companies that nobody really gets excited about visiting, but people know what they're getting and are glad that they're there (especially a late night chain restaurant in Las Vegas)  I can't say that I'm surprised that their ratings are what they are.
+    The companies that were rated 4-5 stars
+    
+    --First query
+
+    SELECT
+        b.name name, h.hours hours
+    FROM
+        business b
+    INNER JOIN hours h ON b.id = h.business_id
+    --INNER JOIN review r ON r.business_id = b.id
+    WHERE
+        b.city = 'Las Vegas' AND
+        b.stars <= 3 and b.stars >= 2
+    ORDER BY 
+        name DESC, hours DESC, stars DESC;
+
+    --Second query
+
+    SELECT
+    
+    b.name DISTINCT(h.hours) hours
+    
+    FROM
+  
+        business b
+
+    INNER JOIN hours h ON b.id = h.business_id
+
+    WHERE b.city = 'Las Vegas' AND
+          b.stars <= 5.0 and b.stars >= 4.0
+
+    ORDER BY hours ASC;
+
+    There were 49 different rows in the query for business with 4-5 stars, and their hours had much more variance: there were some boutique like shops that had strange hours, and there were some places that had conventional business hours.
 
 ii. Do the two groups you chose to analyze have a different number of reviews?
+
+   Yes, the 4-5 star group had only one business with 96 reviews and the 2-3 star group had one business with 42 reviews.
+   It seems (as is not surprising) that far more people will leave a star rating than will leave a written opinion.
+
+   SQL code used for analysis:
+
+    -- first query
+
+    SELECT
+       b.name name, count(distinct(r.id)) cnt
+    FROM
+       business b
+    INNER JOIN 
+       review r 
+    ON 
+        r.business_id = b.id
+    WHERE 
+        b.city = 'Las Vegas'
+    AND
+        b.stars <= 5.0 AND b.stars >= 4.0
+    GROUP BY name
+    ORDER BY cnt DESC;
+
+   --second query
+   
+   SELECT
+       b.name, count(r.id) cnt
+   FROM 
+       business b
+   INNER JOIN
+       review r
+   ON
+       r.business_id = b.id
+   WHERE 
+       b.city = 'Las Vegas' AND
+       b.stars >= 2.0 AND b.stars <=3.0;
+
+   
+    
          
          
 iii. Are you able to infer anything from the location data provided between these two groups? Explain.
 
+There are more businesses with 4-5 stars and they are more spread out.  The businesses with 2-3 stars are largely concentrated near Las Vegas Blvd (The Las Vegas Strip) or the Las Vegas airport.
+I determined this by looking at the zip codes of the business according to the queries below.
+
+
 SQL code used for analysis:
+
+
+2-3 stars
+
+SELECT
+    DISTINCT(b.postal_code)
+FROM 
+    business b
+INNER JOIN
+    review r
+ON
+    r.business_id = b.id
+WHERE 
+    b.city = 'Las Vegas' AND
+    b.stars >= 2.0 AND b.stars <=3.0;
+
+4-5 stars
+
+SELECT
+    DISTINCT(b.postal_code)
+FROM 
+    business b
+INNER JOIN
+    review r
+ON
+    r.business_id = b.id
+WHERE 
+    b.city = 'Las Vegas' AND
+    b.stars >= 4.0 AND b.stars <=5.0;
+
+
+
+results
+
+2-3 stars
+
++-------------+
+| postal_code |
++-------------+
+| 89109       |
+| 89102       |
+| 89123       |
+| 89118       |
+| 89146       |
+| 89148       |
+| 89103       |
+| 89130       |
+| 89119       |
+| 89183       |
++-------------+
+
+results
+
+4-5 stars
+
++-------------+
+| postal_code |
++-------------+
+| 89109       |
+| 89128       |
+| 89149       |
+| 89102       |
+| 89117       |
+| 89104       |
+| 89115       |
+| 89119       |
+| 89148       |
+| 89103       |
+| 89019       |
+| 89101       |
+| 89135       |
+| 89118       |
+| 89183       |
+| 89147       |
+| 89120       |
+| 89134       |
+| 89121       |
+| 89146       |
+| 89113       |
+| 89144       |
++-------------+
 
 		
 		
 2. Group business based on the ones that are open and the ones that are closed. What differences can you find between the ones that are still open and the ones that are closed? List at least two differences and the SQL code you used to arrive at your answer.
 		
 i. Difference 1:
-         
-         
-ii. Difference 2:
-         
-         
-         
-SQL code used for analysis:
+    The ratio of closed to open  business with 4, 4.5, and 5 stars is much smaller than the ratio of closed to open businesses with 2, 2.5, and 3 stars.  It suggests businesses with only 2-3 stars are more likely to close (though this is seemingly only a subset of the associated YELP data). 
+    
 
-	
-	
+SQL Code
+
+Query 1
+
+SELECT
+    count(b.id) id, b.stars stars, b.is_open open--, c.category
+FROM 
+    business b
+WHERE 
+    b.city = 'Las Vegas' AND
+    b.stars >= 2.0 AND b.stars <=3.0
+GROUP BY stars, open
+ORDER BY 
+    stars, open;
+
+
+Results
+
++-----+-------+------+
+|  id | stars | open |
++-----+-------+------+
+|  17 |   2.0 |    0 |
+|  57 |   2.0 |    1 |
+|  22 |   2.5 |    0 |
+| 103 |   2.5 |    1 |
+|  46 |   3.0 |    0 |
+| 158 |   3.0 |    1 |
++-----+-------+------+
+
+Query 2
+
+SELECT
+    count(b.id) id, b.stars stars, b.is_open open--, c.category
+FROM 
+    business b
+WHERE 
+    b.city = 'Las Vegas' AND
+    b.stars >= 4.0 AND b.stars <=5.0
+GROUP BY stars, open
+ORDER BY 
+    stars, open;
+
+Results
+
+
++-----+-------+------+
+|  id | stars | open |
++-----+-------+------+
+|  39 |   4.0 |    0 |
+| 239 |   4.0 |    1 |
+|  32 |   4.5 |    0 |
+| 234 |   4.5 |    1 |
+|  27 |   5.0 |    0 |
+| 267 |   5.0 |    1 |
++-----+-------+------+
+
+ii. Difference 2:
+
+I investigaged a category breakdown of 2-3 starred businesses versus 4-5 starred businesses.
+
+The dataset appears to be fairly sparse when it comes to the category table, but I did notive a greater diversity of categories of businesses that were 4-5 starred versus 2-3 starred.  What stunned me was that the Yelp dataset didn't have any 2-3 starred businesses that were closed and had an associated category.  What also struck me about these results is that the  
+
+Query 1
+
+SELECT
+    b.is_open is_open, c.category cat
+FROM 
+    business b
+INNER JOIN
+    category c
+ON
+    c.business_id = b.id
+WHERE 
+    b.city = 'Las Vegas' AND
+    b.stars >= 2.0 AND b.stars <=3.0
+GROUP BY 
+    is_open, cat
+ORDER BY cat, is_open;
+
+
+Results
+
++---------+-------------------------------+
+| is_open | cat                           |
++---------+-------------------------------+
+|       1 | American (New)                |
+|       1 | Beauty & Spas                 |
+|       1 | Chicken Wings                 |
+|       1 | Convenience Stores            |
+|       1 | Cosmetics & Beauty Supply     |
+|       1 | Drugstores                    |
+|       1 | Food                          |
+|       1 | Photography Stores & Services |
+|       1 | Restaurants                   |
+|       1 | Shopping                      |
++---------+-------------------------------+
+
+Query 2
+
+SELECT
+    b.is_open is_open, c.category cat
+FROM 
+    business b
+INNER JOIN
+    category c
+ON
+    c.business_id = b.id
+WHERE 
+    b.city = 'Las Vegas' AND
+    b.stars >= 4.0 AND b.stars <=5.0
+GROUP BY 
+    is_open, cat
+ORDER BY cat, is_open;
+
+
+Results
+
+I included two sets of results because the webapp will only show 25 at a time, and there were 50 total rows.
+
++---------+---------------------------------+
+| is_open | cat                             |
++---------+---------------------------------+
+|       1 | Active Life                     |
+|       0 | American (New)                  |
+|       1 | Apartments                      |
+|       1 | Asian Fusion                    |
+|       0 | Bakeries                        |
+|       1 | Beauty & Spas                   |
+|       0 | Breakfast & Brunch              |
+|       1 | Chinese                         |
+|       1 | Chiropractors                   |
+|       0 | Chocolatiers & Shops            |
+|       1 | Community Service/Non-Profit    |
+|       1 | Dentists                        |
+|       0 | Desserts                        |
+|       1 | Doctors                         |
+|       1 | Education                       |
+|       1 | Flowers & Gifts                 |
+|       0 | Food                            |
+|       0 | French                          |
+|       1 | Gift Shops                      |
+|       0 | Gluten-Free                     |
+|       1 | Hair Salons                     |
+|       1 | Health & Medical                |
+|       1 | Heating & Air Conditioning/HVAC |
+|       1 | Hiking                          |
+|       1 | Home Services                   |
++=------------------------------------------+
+
++---------+-----------------------+
+| is_open | cat                   |
++---------+-----------------------+
+|       1 | Visitor Centers       |
+|       0 | Vegetarian            |
+|       1 | Travel Services       |
+|       1 | Taiwanese             |
+|       0 | Specialty Food        |
+|       1 | Special Education     |
+|       1 | Soup                  |
+|       1 | Solar Installation    |
+|       1 | Shopping              |
+|       0 | Sandwiches            |
+|       0 | Restaurants           |
+|       1 | Restaurants           |
+|       1 | Real Estate           |
+|       1 | Professional Services |
+|       1 | Physical Therapy      |
+|       1 | Pediatricians         |
+|       1 | Pediatric Dentists    |
+|       1 | Parks                 |
+|       1 | Pain Management       |
+|       1 | Noodles               |
+|       1 | Medical Supplies      |
+|       1 | Malaysian             |
+|       1 | Local Services        |
+|       0 | Japanese              |
+|       1 | Hotels & Travel       |
++---------+-----------------------+
+
+
+
+         
+                 	
 3. For this last part of your analysis, you are going to choose the type of analysis you want to conduct on the Yelp dataset and are going to prepare the data for analysis.
 
 Ideas for analysis include: Parsing out keywords and business attributes for sentiment analysis, clustering businesses to find commonalities or anomalies between them, predicting the overall star rating for a business, predicting the number of fans a user will have, and so on. These are just a few examples to get you started, so feel free to be creative and come up with your own problem you want to solve. Provide answers, in-line, to all of the following:
 	
 i. Indicate the type of analysis you chose to do:
+
+I chose to investigate the question: which cities have the best average rated restaurants?
          
          
 ii. Write 1-2 brief paragraphs on the type of data you will need for your analysis and why you chose that data:
+
+I will need a query for collecting star ratings (I'll go with average star ratings.) of businesses that have the category 'restaurant' listed among their categories, and then have a breakdown according to the cities in which the restaurants are located.  I'll also keep my queries to businesses that are currenlty open.  I'm interested in businesses that provide a sit-down dining experience, so I am keeping my analysis to businesses with 'restaurant' among their categories.
                            
                   
 iii. Output of your finished dataset:
-         
+
+Here are the top 25 cities by higest average starred rating of open restaurants.
+
++---------+-------------------+
+| average | city              |
++---------+-------------------+
+|     5.0 | Mesa              |
+|     4.5 | Cleveland         |
+|     4.0 | Brampton          |
+|     4.0 | Chesterland       |
+|     4.0 | Cuyahoga Falls    |
+|     4.0 | Medina            |
+|     4.0 | Middleton         |
+|     4.0 | Oakville          |
+|     4.0 | Tolleson          |
+|     4.0 | Westlake          |
+|     3.5 | Aurora            |
+|     3.5 | Charlotte         |
+|     3.5 | Edinburgh         |
+|     3.5 | Fitchburg         |
+|     3.5 | Fountain Hills    |
+|     3.5 | Inverness         |
+|     3.5 | Las Vegas         |
+|     3.5 | Litchfield Park   |
+|     3.5 | Mississauga       |
+|     3.5 | Montréal          |
+|     3.5 | Murrysville       |
+|     3.5 | Paw Creek         |
+|     3.5 | Sheffield Village |
+|     3.5 | Sun Prairie       |
+|     3.5 | Toronto           |
++---------+-------------------+
+ 
          
 iv. Provide the SQL code you used to create your final dataset:
+
+SELECT
+    AVG(b.stars) average, b.city
+FROM
+    business b
+INNER JOIN
+    category c
+ON
+    b.id = c.business_id
+WHERE
+    c.category = 'Restaurants' AND
+    b.is_open = 1
+GROUP BY 
+    b.city
+ORDER BY
+    average DESC;      
+
+
+
+
+
+
+
+

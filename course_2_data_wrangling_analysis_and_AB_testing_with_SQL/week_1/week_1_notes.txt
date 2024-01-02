@@ -1,0 +1,43 @@
+Develop healthy skepticism around the data you get: it's cleanliness, the data integrity, etc..
+
+Your data is of unknown quality.
+
+We use Mode analytics for this course.
+We build off of existing SQL knowledge.
+
+COALESCE and Windowing functions.  GET ready to cover these in more detail.
+
+SELECT (CASE WHEN parameter_name =='viewed_user_id'
+        THEN CAST (parameter_value AS INT)
+        ELSE NULL
+        END) AS viewed_user_id
+FROM
+    dsv1069.events
+WHERE
+    event_name = 'view_user_profile'
+
+SELECT get_json(raw.viewed_user_id) AS viewed_user_id
+FROM
+    dev.1069.enents
+WHERE
+    event_name = 'view_user
+
+
+Table names may contain clues that the data are unreliable or not to be used.
+
+SELECT *
+FROM example_table et
+JOIN other_example_table oet
+ON oet.user_id = et.user_id
+AND et.user_id IS NOT NULL;
+
+The COALESCE function is available in some types of SQL, and it allows one to replace NULL withsomething else.
+SELECT
+    COALESCE(parent_user_id, user_id) as original_user_id
+    parent_user_id
+    user_id
+FROM dsv1069.users;
+
+
+Counting is hard when the questions are ambiguous: do you trust your data, make sure you know what your data can and can't tell you, and COUNT WITH CARE!
+
