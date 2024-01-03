@@ -1,0 +1,41 @@
+In this coursera course, we're using MYSQL data types.
+
+Use the right data types: if you want to do a math problem, don't store a number in a string.
+
+Pick the right storage sizes.  It's important to pick sizes that you actually need.
+
+When it comes to text data types, you may need to think about the size of the string in the future - it may not work for all.  You may need to leave room for parameters later.
+
+We can automate queries to add new events to a table or a view.
+
+Remove events generated while testing internally (keep your data clean).  Trim long tail categorical data.  Replace NULLS with appropriate values.
+
+You can build a table containing AB testing metrics.
+
+DESCRIBE table_name;
+
+INSERT INTO table (QUERY);
+REPLACE INTO table (QUERY);
+In hive, the REPLACE INTO is INSERT OVERWRITE.
+
+Queries best practices: Invest your time to make sure that your query is effecient; use appropriate table structure - updating rows or adding parameters like memory usage; optimizing techniques are specific to the database setup you are working with; check out classes on Spark if you are interested in this area.
+
+HIVE SQL is also known as HQL.  Partitions are feattures of hadoop.  Think of partitions as presorting your data into folders.  It doesn't change the way you query your table.
+INSERT INTO TABLE
+items_orders
+(PARTITION category)
+SELECT
+    id,
+    item_name,
+    order_count,
+    category
+FROM ...
+
+If you're going to query or update parts of your data very, very frequently.  Then consider partitioning your data.
+When to partition: an example is to partition by date.  If you frequently query a table for just recent dates.
+    WHERE day >= date_add(CURDATE(), INTERVAL -1 month)
+
+Then a partition on day will help you avoid a full table scan.
+
+Some final tips: trim down your subqueries and joins with 'extra' conditions; don't over-partition your data, at some point scanning directories in directories is less effecient, pick partitions that have roughly similar sizes to prevent a single partition from slowing the query down.
+
