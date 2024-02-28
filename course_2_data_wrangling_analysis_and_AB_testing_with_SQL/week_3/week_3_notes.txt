@@ -1,0 +1,90 @@
+Scaffolding is the art of building a query from the inside out, one query at a time.
+Planning a query: what is the question that's being asked?
+1.) Would this be a good use of our time?
+2.) How many widget related items do we sell?
+3.) What percent of users have viewed a widget page?
+4.) We could also be building a new contraption, would that be a better project?
+5.) What percent of users have viewed items from each product category?
+
+How to create an Aggregate Table with a Rolling Date period?
+
+
+
+Queries can be wireframed: what columns, what tables, what restrictions.  Make this a table in its own right.
+
+Review windowing functions.
+
+
+--The GROUP BY actually doesn't work in this case.
+SELECT 
+    user_id,
+    invoice_id,
+    paid_at
+FROM
+    dsv.1069.orders
+GROUP BY 
+    user_id
+ORDER BY
+    paid_at;
+
+
+THIS WILL WORK
+SELECT
+    user_id,
+    invoide_id,
+    paid_at,
+    RANK( ) OVER (PARTITION BY user_id ORDER BY paid_at ASC)
+        AS order_num,
+    DENSE_RANK( ) OVER (PARTITION BY user_id ORDER BY paid_at ASC)
+        AS dense_order_num,
+    ROW_NUMBER( ) OVER (PARTITION BY user_id ORDER BY paid_at ASC)
+        AS row_num
+FROM dsv1069.orders;
+
+SELECT *
+FROM (
+SELECT
+    user_id,
+    invoide_id,
+    paid_at,
+    RANK( ) OVER (PARTITION BY user_id ORDER BY paid_at ASC)
+        AS order_num,
+    DENSE_RANK( ) OVER (PARTITION BY user_id ORDER BY paid_at ASC)
+        AS dense_order_num,
+    ROW_NUMBER( ) OVER (PARTITION BY user_id ORDER BY paid_at ASC)
+        AS row_num
+FROM dsv1069.orders
+) sub
+WHERE order_num =1 --THIS WHERE clause needs to happen outside the query.
+
+--Here are some other windowing functions.
+RANK() OVER(PARTITION BY __ ORDER BY __ ) AS rank;
+
+ROW_NUMBER() OVER(PARTITION BY __ ORDER BY __) AS row_number;
+
+SUM() OVER(PARTITION BY __ ORDER BY __) AS running_total;
+
+COUNT() OVER(PARTITION BY __ ORDER BY __) as running count;
+
+Basic analysis questions.
+1.) How many times do users re-order a specific item?
+2.) How many times do users re-order an item from a specific category?
+3.) How long between orders/re-orders?
+
+Get the underlying issue beneath this question.
+
+The DENSE_RANK window function determines the rank of a value in a group of values, based on the ORDER BY expression in the OVER clause. If the optional PARTITION BY clause is present, the rankings are reset for each group of rows. Rows with equal values for the ranking criteria receive the same rank. The DENSE_RANK function differs from RANK in one respect: if two or more rows tie, there is no gap in the sequence of ranked values. For example, if two rows are ranked 1, the next rank is 2.
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+

@@ -1,0 +1,53 @@
+AB testing is hypothesis.
+
+The hypothesis is related to business metrics.
+
+Using multiple metrics allows you to interpret results holistically.
+
+Gain insights about effects of user behavior.
+
+You might have to set up AB testing from scratch.  You might also work on an established team and be responsible for creating new metrics related to a new product area.
+
+In machine learning - AB testing is a final step in the algorithm development process.
+
+In any case - this is a SQL project that moves beyond developing a single query.
+
+Gathering data for AB testing: is it a problem if we have a different number of observations in different places?  In general, there is more confidence in more observations.
+
+A confidence interval depends on the observed mean (mu), the number of samples (n), and the standard deviation (sigma).
+Standard error = \sigma / \root{n}.
+
+The null hypothesis means nothing is different, there is no impact of making a different choice.
+
+Condifence intervals would overlap beacause we are sampling to approximate the same value.
+
+P-values tell what is the probability that the difference in means ocurred because of natural variation on the samples.
+
+P-values disprove the null hypothesis.
+
+What happens when a user is placed in an experiment?   Eligibility criteria must be met, and a diversion point must be reached.
+Engagement metrics: email opens, email clicks, orders placed, total number of orders placed, revenue.
+Other engagement metrics: push notification opens, movbile app visits, item views, orders completed, total orders placed, revenue.
+
+Can you run multiple concurrent tests?  The answer is yes!
+
+Measure a change resulting from a change from the user experience: AB testing.
+In order to run an AB test from a new experience: we need feature level engagement (did users interact with the product you altered in a new way); (overall engagement) did the feature change alter the way the users interact overall; business metrics (how does the company make money, and did this change affect the business' costs or ability to collect revenue).
+
+Some metics are not immediately responsive to changes: user retention, bill through (subscriptions), and order returns (purchases).  Others may be more immediate, like cancellations.
+
+Tools: time boxes (just look at a period after exposure).
+Trimmed metrics: remove or cap the top percentile of samples
+
+https://thumbtack.github.io/abba/demo/abba.html
+
+What could go wrong with the analysis?
+1.) There could be errors or bias introdued in the assignment process.
+2.) The metrics are not relevant to the hypothesis being tested.
+3.) The metrics are not calculated properly - it happens.
+4.) The statistics are not calculated properly.
+
+Aggregation of mean metrics needs more statistics than we entered into the abba metrics.  We need the average and standard deviation.  Computing the standard deviation can get tricy if you're trying to segment results.  
+
+AVG(x)
+STDDEV(x)
