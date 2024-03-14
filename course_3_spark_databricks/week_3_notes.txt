@@ -1,0 +1,8 @@
+Mongodb and cosmosdb are common NOSQL databaes.
+Cassandra and reshift are distributed databases.
+DBFS is the databricks filesystem.
+
+OLAP is online analytical processing.
+OLTP is online transaction processing.
+
+
