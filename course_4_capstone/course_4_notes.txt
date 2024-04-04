@@ -1,0 +1,13 @@
+Questions for your capstone to answer.
+1.) What questions do you want to answer, really?  Is this a problem for machine learning?
+2.) Don't get carried away with the questioning or analysis here as there will be more analysis later.
+3.) Focus on the key data elements that are present: what are they, when are they, who are they about; do they connect and how do they connect; jot down ideas as you brainstorm.
+
+What are your initial hypotheses about the data? Write those assumptions down; youll want to go back to them and keep them in front of you as you look at the data to keep them or change them.
+
+From step 1, you may see relationships that you want to explore and will develop a "belief" about the data. Start documenting what you think you can tell from the data. What pops up as interesting to you?  Most likely it will be interesting to others as well.  Use the discussion boards to discuss with others about your client and the data to brainstorm together.
+
+What approach are you going to take in order to prove or disprove your hypotheses?  What features (fields/columns) are you going to look at first?  Is there a relationship that exists that you want to explore?  What metric/evaluation measure will you use?
+
+
+
