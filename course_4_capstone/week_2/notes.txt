@@ -1,0 +1,26 @@
+You should know your data backwards and forwards.  It builds trust in you and your network.
+
+Keep your ERDs up to date!
+
+Look at tweet frequencies per hour, per year, per month, per week, per day of week, etc..
+
+Mean, median, mode.
+
+Explore quartile and decile ranges perhaps?
+
+Extract mentions from tweets, too.
+
+Does tweet volume impact retweets?
+
+histograms, pie charts, bar charts, scatterplots etc..
+
+app.rawgraphs.io  Make a countour plot?
+
+lucidchart.com can help with ERDs.  So can inkscape.
+
+Hypothesis testing.
+
+Statistics refresher:
+
+
+
